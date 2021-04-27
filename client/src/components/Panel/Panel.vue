@@ -1,35 +1,39 @@
 <template>
   <v-container>
       <v-row>
+        <v-col sm="9"></v-col>
         <v-col class="abs-cont" sm="3">
           <NewContent class="abs"></NewContent>
         </v-col>
-        <v-col sm="6">
-          <v-radio-group row defaultValue="all" >
-            <v-radio :label="`Show All`" value="all" checked @click="filterView" />
-            <v-radio :label="`Videos Only`" value="videos" @click="filterView" />
-            <v-radio :label="`Texts Only`" value="texts" @click="filterView" />
-          </v-radio-group>
-        </v-col>
-        <v-col sm="3"></v-col>
       </v-row>
     <section>
+      <v-col sm="4">
+        <v-radio-group row defaultValue="all" >
+            <v-radio :label="`Show All`" value='all' checked @click="filterView('all')" />
+            <v-radio :label="`Videos Only`" @click="filterView('videos')" />
+            <v-radio :label="`Texts Only`" @click="filterView('texts')" />
+          </v-radio-group>
       <div class="course-list" v-if="loadedPanel.length > 0">
-        <v-row>
           <LearnCard
             v-for="item in loadedPanel"
-            :key="item.id"
+            :key="item.title"
             :id="item.id"
             :url="item.url"
             :title="item.title"
             :category="item.category"
-            :view="item.view"
+            :view="view"
           ></LearnCard>
-        </v-row>
       </div>
       <div v-else>
         <p class="no-results">There is no content at the moment.</p>
       </div>
+      </v-col>
+      <v-col sm="4">
+        <textarea rows="5" placeholder="add multiple lines"></textarea>
+      </v-col>
+      <v-col sm="4">
+          <Timer></Timer>
+      </v-col>
     </section>
   </v-container>
 </template>
@@ -38,12 +42,14 @@
 import { mapState } from "vuex"
 import LearnCard from "./LearnCard.vue";
 import NewContent from "./NewContent.vue";
+import Timer from "./Timer.vue";
 
 export default {
   name: "Panel",
   components: {
     LearnCard,
-    NewContent
+    NewContent,
+    Timer
   },
   data() {
     return {
@@ -57,10 +63,10 @@ export default {
         ...mapState(["loadedPanel"])
   },
   methods: {
-    filterView(e) {
-      if (e.target.value == "videos") {
+    filterView(view) {
+      if (view === "videos") {
         this.view = "videos";
-      } else if (e.target.value == "texts") {
+      } else if (view === "texts") {
         this.view = "texts";
       } else this.view = "all";
     }
@@ -78,8 +84,14 @@ export default {
   position: absolute;
 }
 
+textarea {
+  width: 75%;
+  border: 1px solid gray;
+}
+
 .course-list {
   display: flex;
+  flex-direction: column;
   padding-top: 15px;
   padding-right: 15px;
   padding-bottom: 15px;

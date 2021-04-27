@@ -23,29 +23,13 @@
           </v-btn>
         </router-link>
       </v-app-bar>
-      
+
       <v-main>
-        <v-navigation-drawer
-        absolute
-        expand-on-hover
-        right
-        width="20%"
-      >
-        <v-list>
-          <v-list-item link>
-            <v-list-item-content>
-              <v-list-item-title class="title">
-                Sandra Adams
-              </v-list-item-title>
-              <v-list-item-subtitle>sandra_a88@gmail.com</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list>
-      </v-navigation-drawer>
         <v-container>
           <router-view></router-view>
         </v-container>
       </v-main>
+      
     </v-app>
   </div>
 </template>

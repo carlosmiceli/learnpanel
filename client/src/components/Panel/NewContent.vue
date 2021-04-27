@@ -61,7 +61,6 @@ export default {
   },
   methods: {
     addContent() {
-      this.$store.dispatch("loadContent")
       if (!this.formIsValid) {
         return
       }
