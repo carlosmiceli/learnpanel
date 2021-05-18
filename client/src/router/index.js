@@ -18,7 +18,7 @@ export default new VueRouter({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: Login,
     },
     {
       path: '/settings',
@@ -29,6 +29,10 @@ export default new VueRouter({
       // this generates a separate chunk (Settings.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       // component: () => import(/* webpackChunkName: "Settings" */ '../components/User/Settings.vue')
+    },
+    {
+      path: '/admin',
+      name: 'admin',
     },
     {
       path: '/logout',

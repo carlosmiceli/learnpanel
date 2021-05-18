@@ -5,7 +5,7 @@
       <div v-if="category === 'videos'">
         <iframe
           width="100%"
-          src="https://www.youtube.com/embed/gPxyKLCDL_U"
+          :src="url"
           frameborder="0"
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
         </iframe>
@@ -31,7 +31,7 @@
         </v-btn>
       </template>
           <p>Are you sure you want to remove this course?</p>
-          <v-btn @click="removeContent(id), dialog = false">Yes, remove</v-btn>
+          <v-btn @click="removeContent(), dialog = false">Yes, remove</v-btn>
       </v-dialog>
     </div>
   </v-card>

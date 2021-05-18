@@ -38,7 +38,7 @@
   export default {
     computed: {
       user () {
-        return this.$store.getters.user !== null && this.$store.getters.user !== null
+        return this.$store.getters.loggedIn
       }
     },
     methods: {
@@ -85,6 +85,5 @@
     font-size: 24px;
     font-weight: 00;
   }
-
 }
 </style>

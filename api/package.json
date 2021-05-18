@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Learn Panel API",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
@@ -12,12 +13,18 @@
   "license": "ISC",
   "dependencies": {
     "@shelf/jest-mongodb": "^1.2.3",
+    "bcrypt": "^5.0.1",
+    "connect-redis": "^5.2.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "jest": "^26.6.3",
+    "express-session": "^1.17.1",
+    "joi": "^17.4.0",
     "mongodb": "^3.6.6",
-    "node": "^15.14.0"
+    "mongoose": "^5.12.6",
+    "morgan": "^1.10.0",
+    "node": "^15.14.0",
+    "redis": "^3.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

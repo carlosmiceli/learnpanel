@@ -33,7 +33,20 @@
               id="password-login"
             />
           </div>
-          <button @click="login()" class="button">Log In</button>
+          <v-btn
+            class="ma-2"
+            :loading="loading"
+            :disabled="loading"
+            color="info"
+            @click="login(), loader='loading4'"
+          >
+            Login
+            <template v-slot:loader>
+              <span class="custom-loader">
+                <v-icon light>mdi-cached</v-icon>
+              </span>
+            </template>
+          </v-btn>
           <div class="extras">
             <!-- <a @click="togglePasswordReset()">Forgot Password</a> -->
             <a @click="toggleForm()">Create an Account</a>
@@ -69,7 +82,20 @@
               required
             />
           </div>
-          <button @click="signup()" class="button">Sign Up</button>
+          <v-btn
+            class="ma-2"
+            :loading="loading"
+            :disabled="loading"
+            color="info"
+            @click="signup(), loader='loading4'"
+          >
+            Signup
+            <template v-slot:loader>
+              <span class="custom-loader">
+                <v-icon light>mdi-cached</v-icon>
+              </span>
+            </template>
+          </v-btn>
           <div class="extras">
             <a @click="toggleForm()">Back to Log In</a>
           </div>
@@ -103,6 +129,9 @@ export default {
   computed: {
     user () {
       return this.$store.getters.loggedIn
+    },
+    loading () {
+      return this.$store.getters.loading
     },
     errorMessage () {
         return this.$store.getters.errorMessage
@@ -168,4 +197,41 @@ section {
 img {
   max-width: 100%;
 }
+
+.custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
+  }
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>

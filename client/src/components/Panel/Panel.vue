@@ -17,7 +17,7 @@
           <LearnCard
             v-for="item in loadedPanel"
             :key="item.title"
-            :id="item.id"
+            :id="item._id"
             :url="item.url"
             :title="item.title"
             :category="item.category"
@@ -60,7 +60,7 @@ export default {
     this.$store.dispatch("loadContent")
   },
   computed: {
-        ...mapState(["loadedPanel"])
+    ...mapState(["loadedPanel"])
   },
   methods: {
     filterView(view) {
@@ -97,7 +97,7 @@ textarea {
   padding-bottom: 15px;
   padding-left: 15px;
   justify-items: center;
-  align-items: start;
+  align-items: flex-start;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
