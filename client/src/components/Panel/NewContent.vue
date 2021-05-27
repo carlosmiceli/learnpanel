@@ -25,8 +25,8 @@
                 <option disabled selected value="">
                   Choose category
                 </option>
-                <option value="videos">
-                  Video
+                <option value="youtube">
+                  Youtube
                 </option>
                 <option value="texts">
                   Text

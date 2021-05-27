@@ -32,6 +32,18 @@ export const store = new Vuex.Store({
                 }
             }
         },
+        updateNote (state, payload) {
+            let updatedNote = state.loadedPanel.find(c => c._id === payload.id)
+            updatedNote.notes = payload.note
+        },
+        previousCard (state) {
+            let oldCard = state.loadedPanel.pop()
+            state.loadedPanel.unshift(oldCard)
+        },
+        nextCard (state) {
+            let oldCard = state.loadedPanel.shift()
+            state.loadedPanel.push(oldCard)
+        },
         setUser (state, payload) {
             state.user = payload
             state.loggedIn = true
@@ -49,43 +61,85 @@ export const store = new Vuex.Store({
     actions: {
         //CONTENT
         loadContent ({commit}) {
-            const user = this.state.user._id
-            return axios.get(API_URL + "content", {params: {user}})
+            return axios.get(API_URL + "content")
             .then((data) => {
                 commit("setContent", data.data)
             })
             .catch(err => console.log(err))
         },
         addContent ({commit}, payload) {
-            const content = {
-                user: this.state.user._id,
-                title: payload.title,
-                url: payload.url,
-                category: payload.category,
-                createdOn: new Date()
+            let url = {
+                url: payload.url
             }
-            return axios.post(API_URL + "content", content)
+            return axios.post(API_URL + "content/scrape", url)
             .then(res => {
-                console.log(res.data.data)
+                console.log("res", res)
+                const content = {
+                    title: payload.title,
+                    url: payload.url,
+                    image: res.data.img,
+                    text: res.data.text,
+                    videoId: res.data.videoId,
+                    category: payload.category,
+                    createdOn: new Date()
+                }
+                return axios.post(API_URL + "content", content)
+            })
+            .then(res => {
                 commit("addContent", res.data.data)})
             .catch(err => console.log(err))       
         },
         removeContent ({commit}, payload) {
-            const user = this.state.user._id
-            return axios.delete(API_URL + "content", {params: {user, content: payload}})
+            return axios.delete(API_URL + "content", {params: {content: payload}})
             .then(() => {
                 commit("removeContent", payload)
             })
             .catch(err => console.log(err))
         },
+        updateNote ({commit}, payload) {
+            axios.put(API_URL + "content/note", payload)
+            .then(res => {
+                if (res.data === true) {
+                    commit("updateNote", payload)
+                }
+            })
+        },
+        previousCard ({commit}) {
+            axios.put(API_URL + "content/previous")
+            .then(res => {
+                if (res.data === true) {
+                    commit("previousCard")
+                }
+            })
+        },
+        nextCard({commit}) {
+            axios.put(API_URL + "content/next")
+            .then(res => {
+                if (res.data === true) {
+                    commit("nextCard")
+                }
+            })
+        },
 
         // USER
+        checklogin({commit}) {
+            return axios.get(API_URL + "checklogin")
+            .then(res => {
+                if (res.status === 200) {
+                    commit("setUser", res.data)
+                }
+                else router.push("/login")
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        },
         signUp ({commit}, payload) {
             commit("setLoadingStatus", true)
             commit("setErrorStatus", null)
             return axios.post(API_URL + "signup", payload)
             .then((data) => {
-                commit("setUser", data.data.data)
+                commit("setUser", data.user)
                 commit("setLoadingStatus", false)
             })
             .catch(err => {
@@ -98,9 +152,8 @@ export const store = new Vuex.Store({
             commit("setErrorStatus", null)
             axios.post(API_URL + "login", payload)
             .then(data => {
-                console.log(data)
                 commit("setLoadingStatus", false)
-                commit("setUser", data.data.user)
+                commit("setUser", data.user)
             })
             .catch(err => {
                 commit("setLoadingStatus", false)
@@ -137,6 +190,9 @@ export const store = new Vuex.Store({
         },
         loading (state) {
             return state.loading
+        },
+        mainNoteId (state) {
+            return state.loadedPanel[0]._id
         },
         errorMessage (state) {
             return state.error

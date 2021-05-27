@@ -1,38 +1,40 @@
 <template>
   <v-container>
-      <v-row>
-        <v-col sm="9"></v-col>
-        <v-col class="abs-cont" sm="3">
-          <NewContent class="abs"></NewContent>
-        </v-col>
-      </v-row>
     <section>
       <v-col sm="4">
-        <v-radio-group row defaultValue="all" >
-            <v-radio :label="`Show All`" value='all' checked @click="filterView('all')" />
-            <v-radio :label="`Videos Only`" @click="filterView('videos')" />
-            <v-radio :label="`Texts Only`" @click="filterView('texts')" />
-          </v-radio-group>
-      <div class="course-list" v-if="loadedPanel.length > 0">
-          <LearnCard
-            v-for="item in loadedPanel"
-            :key="item.title"
-            :id="item._id"
-            :url="item.url"
-            :title="item.title"
-            :category="item.category"
-            :view="view"
-          ></LearnCard>
+      <div v-if="loadedPanel.length > 0">
+        <div class="changeCard">
+          <p @click="previousCard()">Previous</p>
+          <p @click="nextCard()">Next</p>
+        </div>
+        <LearnCard
+          :key="loadedPanel[0].title"
+          :id="loadedPanel[0]._id"
+          :url="loadedPanel[0].url"
+          :title="loadedPanel[0].title"
+          :image="loadedPanel[0].image"
+          :text="loadedPanel[0].text"
+          :videoId="loadedPanel[0].videoId"
+          :category="loadedPanel[0].category"
+        ></LearnCard>
       </div>
       <div v-else>
         <p class="no-results">There is no content at the moment.</p>
       </div>
       </v-col>
       <v-col sm="4">
-        <textarea rows="5" placeholder="add multiple lines"></textarea>
+        <Timer></Timer>
+        <textarea 
+          v-if="loadedPanel.length > 0" 
+          v-model="loadedPanel[0].notes" 
+          rows="10" 
+          placeholder="add multiple lines"
+          :id="`note-${loadedPanel[0]._id}`"
+          @click="saveNote(loadedPanel[0]._id)" 
+        />
       </v-col>
-      <v-col sm="4">
-          <Timer></Timer>
+      <v-col class="abs-cont" sm="4">
+        <NewContent class="abs"></NewContent>
       </v-col>
     </section>
   </v-container>
@@ -51,30 +53,43 @@ export default {
     NewContent,
     Timer
   },
-  data() {
-    return {
-      view: "all",
-    };
-  },
-  beforeCreate: function () {
+  mounted: function () {
     this.$store.dispatch("loadContent")
   },
   computed: {
     ...mapState(["loadedPanel"])
   },
   methods: {
-    filterView(view) {
-      if (view === "videos") {
-        this.view = "videos";
-      } else if (view === "texts") {
-        this.view = "texts";
-      } else this.view = "all";
-    }
-  }
+    saveNote(id) {
+      let refreshValue = setInterval(() => {
+        this.$store.dispatch("updateNote", {
+          id,
+          note: document.getElementById(`note-${id}`).value
+        })
+      }, 10000)
+      
+      window.addEventListener('click', function(e) {
+        if (!document.getElementById(`note-${id}`).contains(e.target)) {
+          clearInterval(refreshValue)
+        }
+      }) 
+    },
+    previousCard() {
+      this.$store.dispatch("previousCard")
+    },
+    nextCard() {
+      this.$store.dispatch("nextCard")
+    },
+  },
 };
 </script>
 
 <style>
+
+.changeCard {
+  display: flex;
+  justify-content: space-evenly;
+}
 
 .abs-cont {
   position: relative;
@@ -87,22 +102,5 @@ export default {
 textarea {
   width: 75%;
   border: 1px solid gray;
-}
-
-.course-list {
-  display: flex;
-  flex-direction: column;
-  padding-top: 15px;
-  padding-right: 15px;
-  padding-bottom: 15px;
-  padding-left: 15px;
-  justify-items: center;
-  align-items: flex-start;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-.v-input--radio-group__input {
-  justify-content: center;
 }
 </style>

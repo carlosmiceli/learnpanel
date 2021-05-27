@@ -1,38 +1,44 @@
 <template>
-  <v-card class="LearnCard" v-show="view === 'all' || view === category">
-    <h5>{{ title }}</h5>
+  <v-card class="LearnCard">
+    <div class="card-title">
+      <h4>{{ title }}</h4>
+      <div>
+        <v-dialog
+          v-model="dialog"
+          width="300"
+        >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            color="red lighten-2"
+            dark
+            small
+            v-on="on"
+          >
+            X
+          </v-btn>
+        </template>
+          <p>Are you sure you want to remove this course?</p>
+          <v-btn @click="removeContent(), dialog = false">Yes, remove</v-btn>
+        </v-dialog>
+      </div>
+    </div>
     <div>
-      <div v-if="category === 'videos'">
+      <div id="text-card" v-if="category === 'texts'">
+        <img 
+          :id="id"
+          @click="popupWindow()"
+          :src="image"
+          :alt="title"
+        >
+      </div>
+      <div v-if="category === 'youtube'">
         <iframe
           width="100%"
-          :src="url"
+          :src="videoId"
           frameborder="0"
           allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
         </iframe>
       </div>
-      <div v-if="category === 'texts'">
-        <img
-          :id="id"
-          @click="popupWindow()"
-          src="https://www.yourtrainingedge.com/wp-content/uploads/2019/05/background-calm-clouds-747964.jpg"
-        />
-      </div>
-      <v-dialog
-        v-model="dialog"
-        width="300"
-      >
-      <template v-slot:activator="{ on }">
-        <v-btn
-          color="red lighten-2"
-          dark
-          v-on="on"
-        >
-          Remove
-        </v-btn>
-      </template>
-          <p>Are you sure you want to remove this course?</p>
-          <v-btn @click="removeContent(), dialog = false">Yes, remove</v-btn>
-      </v-dialog>
     </div>
   </v-card>
 </template>
@@ -41,16 +47,23 @@
 
 export default {
   name: "LearnCard",
-  props: ["id", "title", "url", "category", "view"],
+  props: ["id", "title", "url", "image", "videoId", "text", "category", "view"],
   data () {
     return {
-      dialog: false
+      dialog: false,
+      renderedText: function () {
+        if (this.category === "texts") {
+          let pars = document.createTextNode(this.text)
+          let node = document.getElementById('text-card')
+          node.appendChild(pars)
+        }
+      }
     }
   },
+  mounted: function () {
+    return this.renderedText()
+  },
   methods: {
-  //imagePreview() {
-
-  // },
     popupWindow() {
       const y = window.top.outerHeight / 2 + window.top.screenY - 800 / 2;
       const x = window.top.outerWidth / 2 - window.top.screenX - 800;
@@ -63,11 +76,8 @@ export default {
     },
     removeContent() {
       this.$store.dispatch("removeContent", this.id);
-    }
+    },
   },
-  // created() {
-  //   this.imagePreview();
-  // }
 };
 </script>
 
@@ -102,6 +112,16 @@ export default {
 .LearnCard img {
   max-width: 100%;
   max-height: 100%;
+}
+
+.LearnCard h4 {
+  padding-top: 5px;
+}
+
+.card-title {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 </style>

@@ -1,9 +1,5 @@
 <template>
   <div id="login">
-    <!-- <PasswordReset
-      v-if="showPasswordReset"
-      @close="togglePasswordReset()"
-    ></PasswordReset> -->
     <section>
       <div class="col1">
         <img
@@ -48,13 +44,11 @@
             </template>
           </v-btn>
           <div class="extras">
-            <!-- <a @click="togglePasswordReset()">Forgot Password</a> -->
             <a @click="toggleForm()">Create an Account</a>
           </div>
         </form>
-        <form v-else @submit.prevent>
+        <form class="create-account" v-else @submit.prevent>
           <h1>Get Started</h1>
-          <div>
             <label for="name">Name</label>
             <input
               v-model.trim="signupForm.name"
@@ -62,8 +56,6 @@
               id="name"
               required
             />
-          </div>
-          <div>
             <label for="email-signup">Email</label>
             <input
               v-model.trim="signupForm.email"
@@ -71,8 +63,6 @@
               id="email-signup"
               required
             />
-          </div>
-          <div>
             <label for="password-signup">Password</label>
             <input
               v-model.trim="signupForm.password"
@@ -81,7 +71,14 @@
               id="password-signup"
               required
             />
-          </div>
+            <label for="password-signup">Repeat Password</label>
+            <input
+              v-model.trim="signupForm.repeatPassword"
+              type="password"
+              placeholder="Write password again"
+              id="repeat-password-signup"
+              required
+            />
           <v-btn
             class="ma-2"
             :loading="loading"
@@ -106,11 +103,8 @@
 </template>
 
 <script>
-// import PasswordReset from "@/components/PasswordReset";
+
 export default {
-  // components: {
-  //   PasswordReset
-  // },
   data() {
     return {
       loginForm: {
@@ -120,10 +114,10 @@ export default {
       signupForm: {
         name: "",
         email: "",
-        password: ""
+        password: "",
+        repeatPassword: "",
       },
-      showLoginForm: true,
-      showPasswordReset: false
+      showLoginForm: true
     };
   },
   computed: {
@@ -158,11 +152,21 @@ export default {
       });
     },
     signup() {
-      this.$store.dispatch("signUp", {
-        email: this.signupForm.email,
-        password: this.signupForm.password,
-        name: this.signupForm.name
-      });
+      if (this.signupForm.password.length < 6) {
+        alert("Password not long enough")
+        return
+      }
+
+      if (this.signupForm.password === this.signupForm.repeatPassword) {
+        this.$store.dispatch("signUp", {
+          email: this.signupForm.email,
+          password: this.signupForm.password,
+          name: this.signupForm.name
+        });
+      }
+      else {
+        alert("Password doesn't match")
+      }
     },
     onDismissed() {
       this.$store.dispatch("setErrorStatus", false)
@@ -196,6 +200,11 @@ section {
 
 img {
   max-width: 100%;
+}
+
+.create-account {
+  display: flex;
+  flex-direction: column;
 }
 
 .custom-loader {

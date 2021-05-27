@@ -10,6 +10,12 @@
              Home
           </v-btn>
         </router-link>
+        <router-link key="Archive" to="/archive">
+          <v-btn plain style="cursor: pointer" :ripple="false">
+            <v-icon>mdi-archive</v-icon>
+             Archive
+          </v-btn>
+        </router-link>
         <router-link key="Settings" to="/settings">
           <v-btn plain style="cursor: pointer" :ripple="false">
             <v-icon>mdi-account-cog</v-icon>

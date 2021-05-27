@@ -12,13 +12,25 @@ const contentSchema = new mongoose.Schema({
       min: 5,
       max: 255,
     },
+    notes: {
+      type: String,
+    },
+    image: {
+      type: String,
+    },
+    text: {
+      type: String,
+    },
+    videoId: {
+      type: String,
+    },
     createdOn: {
       type: Date,
       default: Date.now,
     },
     category: {
       type: String,
-      enum: ["texts", "videos"]
+      enum: ["texts", "youtube"]
     }
 });
 
