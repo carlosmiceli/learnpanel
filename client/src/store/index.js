@@ -5,7 +5,7 @@ import router from "../router";
 
 Vue.use(Vuex)
 
-const API_URL = 'http://localhost:3000/';
+const API_URL = 'https://learn-panel-api.herokuapp.com/';
 
 axios.defaults.withCredentials = true
 
@@ -73,7 +73,6 @@ export const store = new Vuex.Store({
             }
             return axios.post(API_URL + "content/scrape", url)
             .then(res => {
-                console.log("res", res)
                 const content = {
                     title: payload.title,
                     url: payload.url,

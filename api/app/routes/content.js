@@ -28,7 +28,9 @@ contentRouter.post("/", async (req, res) => {
     }
 
     const { error } = contentValidation(content);
-    if (error) return res.status(400).send({ error: error.details[0].message });
+    if (error) {
+        return res.status(400).send({ error: error.details[0].message });
+    }
 
     try {
         await userSchema.updateOne( {_id: req.session.user._id}, { $push: {content: content }})
