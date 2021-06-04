@@ -5,8 +5,7 @@ Prototype of a personalized learning environment built with JS, Vue/Vuetify/VueX
 ## Table of Contents
 
 * Description 
-* Status and TBDs
-* Setup
+* Status
 * Technologies
 * Authors
 * Contact
