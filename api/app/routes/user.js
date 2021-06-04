@@ -97,4 +97,8 @@ userRouter.delete("/logout", async (req, res) => {
     }
 });
 
+userRouter.get("/ping", (req, res) => {
+    res.status(200).send("Ping successful")
+})
+
 export default userRouter

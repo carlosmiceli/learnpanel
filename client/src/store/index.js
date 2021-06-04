@@ -32,10 +32,6 @@ export const store = new Vuex.Store({
                 }
             }
         },
-        updateNote (state, payload) {
-            let updatedNote = state.loadedPanel.find(c => c._id === payload.id)
-            updatedNote.notes = payload.note
-        },
         previousCard (state) {
             let oldCard = state.loadedPanel.pop()
             state.loadedPanel.unshift(oldCard)
@@ -94,14 +90,6 @@ export const store = new Vuex.Store({
                 commit("removeContent", payload)
             })
             .catch(err => console.log(err))
-        },
-        updateNote ({commit}, payload) {
-            axios.put(API_URL + "content/note", payload)
-            .then(res => {
-                if (res.data === true) {
-                    commit("updateNote", payload)
-                }
-            })
         },
         previousCard ({commit}) {
             axios.put(API_URL + "content/previous")

@@ -42,6 +42,7 @@
 
 <script>
 import { mapState } from "vuex"
+import axios from 'axios'
 import LearnCard from "./LearnCard.vue";
 import NewContent from "./NewContent.vue";
 import Timer from "./Timer.vue";
@@ -62,7 +63,7 @@ export default {
   methods: {
     saveNote(id) {
       let refreshValue = setInterval(() => {
-        this.$store.dispatch("updateNote", {
+        axios.put(API_URL + "content/note", {
           id,
           note: document.getElementById(`note-${id}`).value
         })
